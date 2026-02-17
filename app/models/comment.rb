@@ -6,8 +6,8 @@ class Comment < ApplicationRecord
   private
 
   def blog_must_be_published
-    unless blog&.published?
-      errors.add(:base, "Cannot comment on an unpublished blog")
+    if blog.present? && !blog.published?
+      errors.add(:base, "must be published before adding comments")
     end
   end
 end

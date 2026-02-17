@@ -1,6 +1,7 @@
 class Blog < ApplicationRecord
-scope :published, -> { where(published: true) }
-
-validates :title, presence: true
-has_many :comments
+    has_many :comments, dependent: :destroy
+    
+    validates :title, presence: true
+    
+    scope :published, -> { where(published: true) }
 end
