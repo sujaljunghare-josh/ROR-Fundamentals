@@ -1,0 +1,21 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @blog %>
+
+<div>
+  <%= link_to "Edit this blog", edit_blog_path(@blog) %> |
+  <%= link_to "Back to blogs", blogs_path %>
+
+  <%= button_to "Destroy this blog", @blog, method: :delete %>
+</div>
+
+<%= form_with(model: [@blog, @blog.comments.build]) do |form| %>
+  <div>
+    <%= form.label :body, "Leave a comment:" %><br>
+    <%= form.text_area :body %>
+  </div>
+  <%= form.submit "Submit Comment" %>
+<% end %>
+
+<h3>Comments</h3>
+<%= render @blog.comments.where.not(id: nil) %>

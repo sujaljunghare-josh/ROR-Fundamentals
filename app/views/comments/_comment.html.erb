@@ -1,0 +1,9 @@
+<div class="comment-box" style="border: 1px solid #ddd; padding: 10px; margin: 10px 0;">
+  <p><strong>Comment:</strong> <%= comment.body %></p>
+  
+  <% if comment.created_at %>
+    <p><small>Posted <%= time_ago_in_words(comment.created_at) %> ago</small></p>
+  <% else %>
+    <p><small>Draft (unsaved)</small></p>
+  <% end %>
+</div>
