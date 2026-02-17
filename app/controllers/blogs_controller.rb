@@ -63,11 +63,8 @@ class BlogsController < ApplicationController
   end
 
   def publish
-    if @blog.update(published: true)
-      render json: { message: "Blog published!", blog: @blog }, status: :ok
-    else
-      render json: @blog.errors, status: :unprocessable_entity
-    end
+    BlogPublisher.new(@blog).call
+    redirect_to @blog
   end
 
   private
