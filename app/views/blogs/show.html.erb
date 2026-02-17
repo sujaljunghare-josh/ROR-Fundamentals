@@ -9,13 +9,10 @@
   <%= button_to "Destroy this blog", @blog, method: :delete %>
 </div>
 
-<h3>Add a Comment</h3>
-<%= form_with(model: [@blog, @blog.comments.build], local: true) do |f| %>
-  <div class="field">
-    <%= f.label :body %><br>
-    <%= f.text_area :body %>
+<%= form_with(model: [@blog, @blog.comments.build]) do |form| %>
+  <div>
+    <%= form.label :body, "Leave a comment:" %><br>
+    <%= form.text_area :body %>
   </div>
-  <div class="actions">
-    <%= f.submit "Post Comment" %>
-  </div>
+  <%= form.submit "Submit Comment" %>
 <% end %>
