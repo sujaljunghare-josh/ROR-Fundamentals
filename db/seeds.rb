@@ -7,3 +7,15 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+20.times do |i|
+    is_published = i < 10
+    blog = Blog.create!(
+      title: "Blog Post #{i}", 
+      published: is_published
+    )
+    
+    # Only add comments to published ones to respect your validation
+    if is_published
+      blog.comments.create!(body: "Great post!")
+    end
+  end
