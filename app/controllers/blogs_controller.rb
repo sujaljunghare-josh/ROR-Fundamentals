@@ -3,7 +3,7 @@ class BlogsController < ApplicationController
 
   # GET /blogs or /blogs.json
   def index
-    @blogs = Blog.all
+    @blogs = Blog.published
   end
 
   # GET /blogs/1 or /blogs/1.json
@@ -11,6 +11,11 @@ class BlogsController < ApplicationController
     # @blog is already set by the callback
     # Requirement: Only show if published
     render_not_found unless @blog.published?
+  end
+
+  def drafts
+    @blogs = Blog.where(published: false) # The internal list
+    render :index # Reuse the index view!
   end
 
   # GET /blogs/new

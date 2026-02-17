@@ -1,11 +1,16 @@
 Rails.application.routes.draw do
-  # RESTful routes for Blogs and nested Comments
   resources :blogs do
-    resources :comments, only: [:create, :destroy] # Shallow nesting often preferred
+    collection do
+      get :drafts
+    end
+
+    resources :comments, only: [:create, :destroy]
     
-    # API to publish a blog (Member route adds /blogs/:id/publish)
     member do
       patch :publish
     end
   end
-end
+  
+  # Optional: Set a root path so localhost:3000 actually goes somewhere!
+  root "blogs#index"
+end 
