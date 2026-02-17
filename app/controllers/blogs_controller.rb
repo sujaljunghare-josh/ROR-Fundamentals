@@ -39,17 +39,14 @@ class BlogsController < ApplicationController
 
   # PATCH/PUT /blogs/1 or /blogs/1.json
   def update
-    respond_to do |format|
-      if @blog.update(blog_params)
-        format.html { redirect_to @blog, notice: "Blog was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @blog }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @blog.errors, status: :unprocessable_entity }
-      end
+    # blog_params is the 'Strong Parameter' method we defined
+    if @blog.update(blog_params)
+      redirect_to @blog, notice: "Blog was successfully updated."
+    else
+      # status: :unprocessable_entity is important for Turbo/Modern Rails
+      render :edit, status: :unprocessable_entity 
     end
   end
-
   # DELETE /blogs/1 or /blogs/1.json
   def destroy
     @blog.destroy!
@@ -62,9 +59,9 @@ class BlogsController < ApplicationController
 
   def publish
     if @blog.update(published: true)
-      redirect_to @blog, notice: "Blog post was successfully published."
+      render json: { message: "Blog published!", blog: @blog }, status: :ok
     else
-      redirect_to @blog, alert: "Unable to publish blog."
+      render json: @blog.errors, status: :unprocessable_entity
     end
   end
 
@@ -80,6 +77,6 @@ class BlogsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def blog_params
-      params.expect(blog: [ :title, :body ])
+      params.require(:blog).permit(:title, :body)
     end
 end
