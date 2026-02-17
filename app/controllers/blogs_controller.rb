@@ -1,9 +1,16 @@
 class BlogsController < ApplicationController
   before_action :set_blog, only: [:show, :edit, :update, :destroy, :publish]
 
-  # GET /blogs or /blogs.json
+  require 'benchmark'
+   # GET /blogs or /blogs.json
   def index
-    @blogs = Blog.published
+    # We measure the time taken to fetch the published blogs
+    @benchmark_result = Benchmark.realtime do
+      @blogs = Blog.published.to_a # .to_a forces the query to execute now
+    end
+    
+    # Optional: Share result in the console or response headers
+    puts "Index API Benchmark: #{@benchmark_result} seconds"
   end
 
   # GET /blogs/1 or /blogs/1.json
