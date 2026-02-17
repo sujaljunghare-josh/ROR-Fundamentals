@@ -1,5 +1,5 @@
 class BlogsController < ApplicationController
-  before_action :set_blog, only: %i[ show edit update destroy ]
+  before_action :set_blog, only: [:show, :edit, :update, :destroy, :publish]
 
   # GET /blogs or /blogs.json
   def index
@@ -8,6 +8,9 @@ class BlogsController < ApplicationController
 
   # GET /blogs/1 or /blogs/1.json
   def show
+    # @blog is already set by the callback
+    # Requirement: Only show if published
+    render_not_found unless @blog.published?
   end
 
   # GET /blogs/new
@@ -57,10 +60,22 @@ class BlogsController < ApplicationController
     end
   end
 
+  def publish
+    if @blog.update(published: true)
+      redirect_to @blog, notice: "Blog post was successfully published."
+    else
+      redirect_to @blog, alert: "Unable to publish blog."
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_blog
       @blog = Blog.find(params.expect(:id))
+    end
+
+    def render_not_found
+      render file: "#{Rails.root}/public/404.html", status: :not_found, layout: false
     end
 
     # Only allow a list of trusted parameters through.
